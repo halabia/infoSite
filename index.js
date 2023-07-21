@@ -1,35 +1,22 @@
-var http = require('http');
-var fs = require('fs');
+const express = require("express");
+const app = express();
+const port = 1000;
+const path = require('path');
 
-http.createServer((req, res) => {
-    if (req.url === '/') {
-        fs.readFile('index.html', function (err, data) {
-            if (err) throw err;
-            res.write(data);
-            return res.end;
-        });
-    }
-    else if (req.url === '/about') {
-        fs.readFile('about.html', function (err, data) {
-            if (err) throw err;
-            res.write(data);
-            return res.end;
-        });
-    }
-    else if (req.url === '/contact-me') {
-        fs.readFile('contact-me.html', function (err, data) {
-            if (err) throw err;
-            res.write(data);
-            return res.end;
-        });
-    }
-    else {
-        fs.readFile('404.html', function (err, data) {
-            if (err) throw err;
-            res.write(data);
-            return res.end;
-        });
-    }
-}).listen(1000, () => {
-    console.log('Listeninig on port  1000.....');
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, '/index.html'));
+});
+app.get("/about", (req, res) => {
+    res.sendFile(path.join(__dirname, '/about.html'));
+});
+app.get("/contact", (req, res) => {
+    res.sendFile(path.join(__dirname, '/contact-me.html'));
+});
+
+app.get("/*", (req, res) => {
+    res.sendFile(path.join(__dirname, '/404.html'));
+});
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}!`);
 });
